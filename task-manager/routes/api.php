@@ -19,4 +19,5 @@ $router->group(['prefix' => 'api'], function () use ($router) {
     $router->get('/tasks/{id}', 'TaskController@getTask');
     $router->put('/tasks/{id}', 'TaskController@update');
     $router->delete('/tasks/{id}', 'TaskController@delete');
+    $router->post('/tasks/{id}/duplicate', 'TaskController@duplicateTask');
 });

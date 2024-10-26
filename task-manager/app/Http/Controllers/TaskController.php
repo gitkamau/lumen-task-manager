@@ -99,4 +99,26 @@ class TaskController extends Controller
 
         return response()->json(['message' => 'Task deleted successfully']);
     }
+
+
+    // Duplicate Task
+    public function  duplicateTask(Request $request, $id)
+    {
+        $originalTask = Task::find($id);
+
+        $this->validate($request, [
+            'title' => 'sometimes|required|unique:tasks,title',
+        ]);
+
+        if(!$originalTask){
+            return response()->json(['error'=>'Task not Found'], 404);
+        }
+
+        $newTask = $originalTask->replicate();
+        $newTask->title = $request->title ? $request->title : $originalTask->title .'(Copy)';
+        $newTask->status = 'pending';
+        $newTask->save();
+
+        return response()->json(['message'=> 'Task duplicated successfully', 'task'=>$newTask], 201);
+    }
 }
